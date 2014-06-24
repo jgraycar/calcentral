@@ -1,6 +1,6 @@
 module MyBadges
   class GoogleMail
-    include MyBadges::BadgesModule, DatedFeed
+    include MyBadges::BadgesModule, DatedFeed, ClassLogger
     include Cache::UserCacheExpiry
 
     def initialize(uid)
@@ -21,15 +21,15 @@ module MyBadges
     def internal_fetch_counts(params = {})
       google_proxy = GoogleApps::MailList.new(user_id: @uid)
       google_mail_results = google_proxy.mail_unread
-      Rails.logger.debug "#{self.class.name}: Processing #{google_mail_results} GMail XML results"
+      logger.debug "Processing GMail XML results: #{google_mail_results.inspect}"
       response = {:count => 0, :items => []}
-      if google_mail_results && google_mail_results.response
+      if google_mail_results && google_mail_results.response && google_mail_results.response.status == 200
         nokogiri_xml = nil
 
         begin
           nokogiri_xml = Nokogiri::XML.parse(google_mail_results.response.body)
         rescue => e
-          Rails.logger.fatal "Error parsing XML output for GoogleApps::MailList: #{e}"
+          logger.fatal "Error parsing XML output for GoogleApps::MailList: #{e}"
           nokogiri_xml = nil
         end
 
@@ -38,7 +38,6 @@ module MyBadges
           response[:items] = get_items nokogiri_xml
         end
       end
-
       response
     end
 
@@ -46,7 +45,7 @@ module MyBadges
       begin
         nokogiri_xml.search('fullcount').first.content.to_i
       rescue => e
-        Rails.logger.warn "#{self.class.name}: Error parsing XML output for unread counts from GoogleApps::MailList: #{e}"
+        logger.warn "Error parsing XML output for unread counts from GoogleApps::MailList: #{e}"
         return 0
       end
     end
@@ -75,21 +74,21 @@ module MyBadges
               begin
                 entry[:modifiedTime] = format_date DateTime.iso8601(entry[:modifiedTime])
               rescue => e
-                Rails.logger.warn "#{self.class.name} Could not parse modified: #{entry[:modifiedTime]}"
+                logger.warn "Could not parse modified: #{entry[:modifiedTime]}"
                 next
               end
             end
             items << entry
             iter_count +=1
           rescue => e
-            Rails.logger.warn "#{self.class.name}: Unable to parse entry - #{raw_entry}"
+            logger.warn "Unable to parse entry - #{raw_entry}"
             next
           end
         end
         items
       rescue => e
-        Rails.logger.fatal "#{self.class.name} Error parsing XML output for mail items from GoogleApps::MailList: #{e}"
-        Rails.logger.debug "Full dump of xml: #{nokogiri_xml}"
+        logger.fatal "Error parsing XML output for mail items from GoogleApps::MailList: #{e}"
+        logger.debug "Full dump of xml: #{nokogiri_xml}"
       end
       items
     end

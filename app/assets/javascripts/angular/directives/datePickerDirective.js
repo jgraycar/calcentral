@@ -11,6 +11,10 @@
         // Keep track on whether the picker has been initialized before or not
         scope.pickerInitialized = false;
 
+        // Set the type attribute to button
+        // otherwise the datepicker might show when you hit enter to submit the form
+        elm.attr('type', 'button');
+
         var initializePicker = function() {
           scope.pickerInitialized = true;
 
@@ -57,13 +61,22 @@
            * @param {Object} clickEvent Event containing the click information
            */
           var closeAll = function(clickEvent) {
+
             // Do not close the datepicker when you're selecting the month or year
-            if (clickEvent && clickEvent.target && clickEvent.target.className) {
+            if (clickEvent && clickEvent.target && (clickEvent.target.className || clickEvent.target.tagName)) {
               var className = clickEvent.target.className;
-              if (className.indexOf('pika-select') !== -1 || className.indexOf('pika-next') !== -1 || className.indexOf('pika-prev') !== -1) {
+
+              // For IE 10/11 we need to check whether the option element was clicked
+              var tagName = clickEvent.target.tagName;
+
+              if (className.indexOf('pika-select') !== -1 ||
+                className.indexOf('pika-next') !== -1 ||
+                className.indexOf('pika-prev') !== -1 ||
+                tagName === 'OPTION') {
                 return;
               }
             }
+
             scope.pickerShown = false;
             scope.pickerInitialized = false;
             watchshown();

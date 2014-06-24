@@ -101,6 +101,11 @@ form {
 
 }
 
+/* Audio */
+audio {
+  max-width: 100%;
+}
+
 /* Buttons */
 button {
   @include box-shadow(none);
@@ -340,6 +345,9 @@ button {
     -webkit-appearance: none;
     option {
       width: 100%;
+    }
+    &::-ms-expand {
+      display: none;
     }
   }
 }
