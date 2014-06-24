@@ -38,7 +38,7 @@ namespace :calcentral_dev do
   end
 end
 
-# Sandbox_dev is the sandbox testing server that we have setup in 117. It sits on a old macbook
+# Sandbox_dev is the sandbox testing server that we have setup in 117. It sits on an old macbook
 # and runs headless, used primarily for demos and other testing/experimental purposes.
 namespace :sandbox_dev_host do
   desc "Update and restart the sandbox_dev machine"
