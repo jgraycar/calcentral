@@ -6,7 +6,6 @@ module MyAcademics
       # -------------------- my added code ----------------------
       @law_student = law_student
       # ------------------ end my added code -------------------- 
-      end
     end
 
     def to_text(element)
