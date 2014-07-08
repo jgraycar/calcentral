@@ -4,7 +4,7 @@ module MyAcademics
     def initialize(uid, law_student=false)
       @uid = uid
       # -------------------- my added code ----------------------
-      # @law_student = law_student
+      @law_student = law_student
       # ------------------ end my added code -------------------- 
     end
 
