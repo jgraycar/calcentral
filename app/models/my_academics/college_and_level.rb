@@ -3,7 +3,7 @@ module MyAcademics
   class CollegeAndLevel
     include AcademicsModule, ClassLogger
 
-    def merge(data)
+    def merge(data, law_student=false)
       profile_feed = Bearfacts::Profile.new({:user_id => @uid}).get
       feed = profile_feed.except(:xml_doc)
       doc = profile_feed[:xml_doc]
