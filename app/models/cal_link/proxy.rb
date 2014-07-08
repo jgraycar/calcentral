@@ -1,5 +1,7 @@
 module CalLink
   class Proxy < BaseProxy
+    extend Proxies::EnableForActAs
+
     require 'securerandom'
 
     APP_ID = "CalLink"

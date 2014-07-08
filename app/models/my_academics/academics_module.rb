@@ -1,11 +1,8 @@
 module MyAcademics
   module AcademicsModule
 
-    def initialize(uid, law_student)
+    def initialize(uid)
       @uid = uid
-      # -------------------- my added code ----------------------
-      @law_student = law_student
-      # ------------------ end my added code -------------------- 
     end
 
     def to_text(element)
@@ -95,7 +92,6 @@ module MyAcademics
       end
       bucket
     end
-
 
   end
 end
