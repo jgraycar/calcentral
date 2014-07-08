@@ -94,8 +94,6 @@ module MyAcademics
       bucket
     end
 
-<<<<<<< HEAD
-=======
     def add_other_site_membership(feed, course_site)
       feed[:otherSiteMemberships] ||= []
       term_slug = Berkeley::TermCodes.to_slug(course_site[:term_yr], course_site[:term_cd])
@@ -114,6 +112,5 @@ module MyAcademics
       other_sites << course_site_entry(course_site)
     end
 
->>>>>>> ccc93275dc10c37b9e0cd094b487ecfff91e89bf
   end
 end
