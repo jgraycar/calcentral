@@ -2,7 +2,7 @@ module MyAcademics
   class SakaiSites
     include AcademicsModule
 
-    def merge(data)
+    def merge(data, law_student=false)
       if Sakai::Proxy.access_granted?(@uid) && (sakai_sites = Sakai::SakaiMergedUserSites.new(user_id: @uid).get_feed)
         sakai_sites[:courses].each do |course_site|
           if (term_yr = course_site[:term_yr]) && (term_cd = course_site[:term_cd]) &&

@@ -2,7 +2,7 @@ module MyAcademics
   class CanvasSites
     include AcademicsModule
 
-    def merge(data)
+    def merge(data, law_student=false)
       if Canvas::Proxy.access_granted?(@uid) && (canvas_sites = Canvas::MergedUserSites.new(@uid).get_feed)
         included_course_sites = {}
         canvas_sites[:courses].each do |course_site|

@@ -4,7 +4,7 @@ module MyAcademics
     include AcademicsModule
     include DatedFeed
 
-    def merge(data = {})
+    def merge(data = {}, law_student=false)
       proxy = Bearfacts::Exams.new({:user_id => @uid})
       doc = proxy.get[:xml_doc]
 

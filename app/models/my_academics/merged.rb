@@ -25,7 +25,7 @@ module MyAcademics
         CanvasSites,
         SakaiSites
       ].each do |provider|
-        provider.new(@uid, @law_student).merge(feed)
+        provider.new(@uid).merge(feed, @law_student)
       end
       feed
     end

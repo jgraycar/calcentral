@@ -3,7 +3,7 @@ module MyAcademics
   class Telebears
     include AcademicsModule, ClassLogger, DatedFeed
 
-    def merge(data)
+    def merge(data, law_student=false)
       data[:telebears] = {}
 
       doc = Bearfacts::Telebears.new({:user_id => @uid}).get[:xml_doc]
