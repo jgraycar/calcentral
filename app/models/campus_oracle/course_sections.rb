@@ -1,5 +1,6 @@
 module CampusOracle
   class CourseSections < BaseProxy
+    extend Proxies::EnableForActAs
 
     def initialize(options = {})
       super(Settings.sakai_proxy, options)

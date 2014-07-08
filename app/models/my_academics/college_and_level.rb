@@ -31,6 +31,8 @@ module MyAcademics
           return
       end
       general_profile = doc.css("studentGeneralProfile")
+      level = to_text(general_profile.css("corpEducLevel")).titleize
+      nonAPLevel = to_text(general_profile.css("nonAPLevel")).titleize
       # -------------------- my added code ----------------------
       #if @law_student
       #  level = ""

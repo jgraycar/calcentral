@@ -1,7 +1,7 @@
 require 'my_tasks/param_validator'
 
 module MyTasks
-  class Merged < FilteredViewAsModel
+  class Merged < UserSpecificModel
     include MyTasks::ParamValidator
     include Cache::LiveUpdatesEnabled
 
@@ -18,9 +18,11 @@ module MyTasks
     def init
       @enabled_sources ||= {
         Canvas::Proxy::APP_NAME => {access_granted: Canvas::Proxy.access_granted?(@uid),
-                                source: MyTasks::CanvasTasks.new(@uid, @starting_date)},
+                                source: MyTasks::CanvasTasks.new(@uid, @starting_date),
+                                pseudo_enabled: Canvas::Proxy.allow_pseudo_user?},
         GoogleApps::Proxy::APP_ID => {access_granted: GoogleApps::Proxy.access_granted?(@uid),
-                                source: MyTasks::GoogleTasks.new(@uid, @starting_date)}
+                                source: MyTasks::GoogleTasks.new(@uid, @starting_date),
+                                pseudo_enabled: GoogleApps::Proxy.allow_pseudo_user?}
       }
       @enabled_sources.select!{|k,v| v[:access_granted] == true}
     end
@@ -28,17 +30,15 @@ module MyTasks
     def get_feed_internal
       tasks = []
       @enabled_sources.each do |key, value_hash|
-       value_hash[:source].future_count = @future_count
+        if (is_acting_as_nonfake_user?) && !value_hash[:pseudo_enabled]
+          next
+        end
+        value_hash[:source].future_count = @future_count
         tasks += value_hash[:source].fetch_tasks
         @future_count += value_hash[:source].future_count
       end
       logger.debug "#{self.class.name} get_feed is #{tasks.inspect}"
       {"tasks" => tasks}
-    end
-
-    def filter_for_view_as(feed)
-      feed['tasks'].delete_if {|t| t['emitter'] == 'Google'}
-      feed
     end
 
     def update_task(params, task_list_id="@default")
