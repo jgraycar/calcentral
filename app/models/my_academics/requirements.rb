@@ -6,7 +6,7 @@ module MyAcademics
     def merge(data)
       profile_proxy = Bearfacts::Profile.new({:user_id => @uid})
       doc = profile_proxy.get[:xml_doc]
-      return data if doc.blank?
+      return data if doc.blank? #|| @law_student # Joel added the '|| @law_student'
 
       requirements = []
       req_nodes = doc.css("underGradReqProfile")

@@ -33,6 +33,15 @@ module MyAcademics
       general_profile = doc.css("studentGeneralProfile")
       level = to_text(general_profile.css("corpEducLevel")).titleize
       nonAPLevel = to_text(general_profile.css("nonAPLevel")).titleize
+      # -------------------- my added code ----------------------
+      #if @law_student
+      #  level = ""
+      #  nonAPLevel = ""
+      #else
+      #  level = to_text(general_profile.css("corpEducLevel")).titleize
+      #  nonAPLevel = to_text(general_profile.css("nonAPLevel")).titleize
+      #end
+      # ------------------ end my added code -------------------- 
       futureTBLevel = to_text(general_profile.css("futureTBLevel")).titleize
       colleges = []
       primary_college_abbv = to_text(general_profile.css("collegePrimary"))

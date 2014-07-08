@@ -11,6 +11,8 @@ module MyAcademics
 
     def get_feed_internal
       feed = {}
+      # Provider ordering is significant! In particular, Semesters/Teaching must
+      # be merged before course sites.
       [
         CollegeAndLevel,
         GpaUnits,
@@ -20,8 +22,10 @@ module MyAcademics
         Teaching,
         Exams,
         Telebears,
+        CanvasSites,
+        SakaiSites
       ].each do |provider|
-        provider.new(@uid).merge(feed)
+        provider.new(@uid, @law_student).merge(feed)
       end
       feed
     end
