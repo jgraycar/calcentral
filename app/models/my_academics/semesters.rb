@@ -24,7 +24,7 @@ module MyAcademics
               section[:units] = section[:unit]
             end
           end
-          class_item[:transcript] = find_transcript_data(transcripts, term_yr, term_cd, course[:dept], course[:catid])
+          class_item[:transcript] = find_transcript_data(transcripts, term_yr, term_cd, course[:dept], course[:catid], law_student)
           semester[:classes] << class_item
         end
         semesters << semester unless semester[:classes].empty?
@@ -33,7 +33,8 @@ module MyAcademics
       data[:semesters] = semesters
     end
 
-    def find_transcript_data(transcripts, term_yr, term_cd, dept_name, catalog_id)
+    def find_transcript_data(transcripts, term_yr, term_cd, dept_name,
+                             catalog_id, law_student=false)
       matching_transcripts = transcripts.select do |t|
         t['term_yr'] == term_yr &&
           t['term_cd'] == term_cd &&
@@ -41,11 +42,22 @@ module MyAcademics
           t['catalog_id'] == catalog_id
       end
       if matching_transcripts.present?
-        matching_transcripts.collect do |t|
+        # {
+        #   units: t['transcript_unit'],
+        #   grade: t['grade']
+        # }
+        if law_student
           {
-            units: t['transcript_unit'],
-            grade: t['grade']
+            units: t['transcript_unit']
+            grade: "N/A"
           }
+        else
+          matching_transcripts.collect do |t|
+            {
+              units: t['transcript_unit'],
+              grade: t['grade']
+            }
+          end
         end
       else
         nil

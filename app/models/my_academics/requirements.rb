@@ -9,12 +9,15 @@ module MyAcademics
       return data if doc.blank? #|| law_student # Joel added the '|| @law_student'
 
       requirements = []
-      req_nodes = doc.css("underGradReqProfile")
-      req_nodes.children().each do |node|
-        name = node.name
-        status = node.text.upcase == "REQT SATISFIED" ? "met" : ""
-        # translate requirement names to English
-        case node.name.upcase
+      if law_student
+        # Get Law School requirements, check here
+      else
+        req_nodes = doc.css("underGradReqProfile")
+        req_nodes.children().each do |node|
+          name = node.name
+          status = node.text.upcase == "REQT SATISFIED" ? "met" : ""
+          # translate requirement names to English
+          case node.name.upcase
           when "SUBJECTA"
             name = "UC Entry Level Writing"
           when "AMERICANHISTORY"
@@ -23,6 +26,7 @@ module MyAcademics
             name = "American Institutions"
           when "AMERICANCULTURES"
             name = "American Cultures"
+          end
         end
 
         requirements << {

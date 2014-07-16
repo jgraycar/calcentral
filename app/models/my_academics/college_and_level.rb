@@ -31,16 +31,17 @@ module MyAcademics
           return
       end
       general_profile = doc.css("studentGeneralProfile")
-      level = to_text(general_profile.css("corpEducLevel")).titleize
-      nonAPLevel = to_text(general_profile.css("nonAPLevel")).titleize
+      #level = to_text(general_profile.css("corpEducLevel")).titleize
+      #nonAPLevel = to_text(general_profile.css("nonAPLevel")).titleize
       # -------------------- my added code ----------------------
-      #if @law_student
-      #  level = ""
-      #  nonAPLevel = ""
-      #else
-      #  level = to_text(general_profile.css("corpEducLevel")).titleize
-      #  nonAPLevel = to_text(general_profile.css("nonAPLevel")).titleize
-      #end
+      if law_student
+        # if can get relevant level from Law School API put here
+        level = ""
+        nonAPLevel = ""
+      else
+        level = to_text(general_profile.css("corpEducLevel")).titleize
+        nonAPLevel = to_text(general_profile.css("nonAPLevel")).titleize
+      end
       # ------------------ end my added code -------------------- 
       futureTBLevel = to_text(general_profile.css("futureTBLevel")).titleize
       colleges = []

@@ -1,9 +1,8 @@
 module MyAcademics
   module AcademicsModule
 
-    def initialize(uid, law_student=false)
+    def initialize(uid)
       @uid = uid
-      @law_student = law_student
     end
 
     def to_text(element)
