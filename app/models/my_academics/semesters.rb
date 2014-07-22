@@ -47,10 +47,12 @@ module MyAcademics
         #   grade: t['grade']
         # }
         if law_student
-          {
-            units: t['transcript_unit']
-            grade: "N/A"
-          }
+          matching_transcripts.collect do |t|
+            {
+              units: t['transcript_unit'],
+              grade: "N/A"
+            }
+          end
         else
           matching_transcripts.collect do |t|
             {

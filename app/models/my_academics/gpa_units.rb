@@ -14,8 +14,10 @@ module MyAcademics
       if law_student
         # Ideally, get from API here
         # May have issue later if require float; need to see how used down the line
-        cumulativeGpa: "N/A"
-        totalUnits: "N/A"
+        data[:gpaUnits] = {
+          cumulativeGpa: "N/A",
+          totalUnits: "N/A"
+        }
       else
         data[:gpaUnits] = {
           cumulativeGpa: student_info["cum_gpa"].nil? ? nil: student_info["cum_gpa"].to_f,
