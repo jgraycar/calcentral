@@ -31,8 +31,8 @@ module MyAcademics
           return
       end
       general_profile = doc.css("studentGeneralProfile")
+      # level will probably be gotten some other way, ie not from BearFacts
       level = to_text(general_profile.css("corpEducLevel")).titleize
-      nonAPLevel = to_text(general_profile.css("nonAPLevel")).titleize
       futureTBLevel = to_text(general_profile.css("futureTBLevel")).titleize
       colleges = []
       primary_college_abbv = to_text(general_profile.css("collegePrimary"))
@@ -89,7 +89,7 @@ module MyAcademics
       {
         standing: standing,
         level: level,
-        nonApLevel: nonAPLevel,
+        nonApLevel: "Not Applicable",
         futureTelebearsLevel: futureTBLevel,
         colleges: colleges
       }

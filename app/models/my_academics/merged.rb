@@ -12,8 +12,8 @@ module MyAcademics
     def get_feed_internal
       feed = {}
       if @law_student
-        # Provider ordering is significant! In particular, Semesters/Teaching must
-        # be merged before course sites.
+        # Currently providing same information, but eventually could make different if
+        # also modify what controller expects
         [
          LawCollegeAndLevel,
          LawGpaUnits,

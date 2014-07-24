@@ -9,22 +9,13 @@ module MyAcademics
       return data if doc.blank?
 
       requirements = []
-      req_nodes = doc.css("underGradReqProfile")
-      req_nodes.children().each do |node|
-        name = node.name
-        status = node.text.upcase == "REQT SATISFIED" ? "met" : ""
-        # translate requirement names to English
-        case node.name.upcase
-        when "SUBJECTA"
-          name = "UC Entry Level Writing"
-        when "AMERICANHISTORY"
-          name = "American History"
-        when "AMERICANINSTITUTIONS"
-          name = "American Institutions"
-        when "AMERICANCULTURES"
-          name = "American Cultures"
-        end
-
+      # somehow get requirements as a class with accessor methods name & status
+      # status should be either "met" if met or "" if not yet
+      law_requirements = get_law_requirements_somehow()
+      law_requirements.each do |req|
+        name = req.name
+        status = req.status
+        # Might have to make name prettier here; see requirements.rb for example
         requirements << {
           name: name,
           status: status

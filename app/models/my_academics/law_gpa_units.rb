@@ -2,28 +2,18 @@ module MyAcademics
   class GpaUnits
     include AcademicsModule
 
-    def merge(data, law_student=false)
+    def merge(data)
       student_info = CampusOracle::Queries.get_student_info(@uid) || {}
-      return data if student_info.nil? #|| law_student # Joel added the '|| @law_student'
+      return data if student_info.nil?
 
-      # data[:gpaUnits] = {
-      #   cumulativeGpa: student_info["cum_gpa"].nil? ? nil: student_info["cum_gpa"].to_f,
-      #   totalUnits: student_info["tot_units"].nil? ? nil : student_info["tot_units"].to_f
-      # }
-
-      if law_student
-        # Ideally, get from API here
-        # May have issue later if require float; need to see how used down the line
-        data[:gpaUnits] = {
-          cumulativeGpa: "N/A",
-          totalUnits: "N/A"
-        }
-      else
-        data[:gpaUnits] = {
-          cumulativeGpa: student_info["cum_gpa"].nil? ? nil: student_info["cum_gpa"].to_f,
-          totalUnits: student_info["tot_units"].nil? ? nil : student_info["tot_units"].to_f
-        }
-      end
+      # to ask Devin:
+      # 1. how can we get their law-school equivalent of gpa?
+      # 2. Does CampusOracle have their correct amount of total units,
+      # or need some other way of getting?
+      data[:gpaUnits] = {
+        cumulativeGpa: "Not Applicable",
+        totalUnits: student_info["tot_units"].nil? ? nil : student_info["tot_units"].to_f
+      }
     end
   end
 end
