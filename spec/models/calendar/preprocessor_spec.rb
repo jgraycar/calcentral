@@ -84,27 +84,27 @@ describe Calendar::Preprocessor do
       it_behaves_like 'it has a non-empty array of ClassCalendarQueue entries'
       it 'has the meeting place and times for a multi-scheduled Biology 1a' do
         json = JSON.parse(subject[0].event_data)
-        expect(json['location']).to eq 'VALLEY LSB 2030'
+        expect(json['location']).to eq 'VALLEY LSB 2030, UC Berkeley'
         expect(json['start']['dateTime']).to eq '2013-09-02T16:00:00.000-07:00'
         expect(json['end']['dateTime']).to eq '2013-09-02T17:00:00.000-07:00'
-        expect(json['recurrence'][0]).to eq 'RRULE:FREQ=WEEKLY;UNTIL=20131214T075959Z;BYDAY=MO'
+        expect(json['recurrence'][0]).to eq 'RRULE:FREQ=WEEKLY;UNTIL=20131207T075959Z;BYDAY=MO'
         expect(json['attendees'].length).to eq 1
         expect(json['attendees'][0]['email']).to eq 'ctweney@testg.berkeley.edu.test-google-a.com'
         expect(subject[0].multi_entry_cd).to eq 'A'
         expect(subject[0].transaction_type).to eq 'C'
 
         json = JSON.parse(subject[1].event_data)
-        expect(json['location']).to eq 'EVANS 60'
+        expect(json['location']).to eq 'EVANS 60, UC Berkeley'
         expect(json['start']['dateTime']).to eq '2013-09-04T14:00:00.000-07:00'
         expect(json['end']['dateTime']).to eq '2013-09-04T15:00:00.000-07:00'
-        expect(json['recurrence'][0]).to eq 'RRULE:FREQ=WEEKLY;UNTIL=20131214T075959Z;BYDAY=WE'
+        expect(json['recurrence'][0]).to eq 'RRULE:FREQ=WEEKLY;UNTIL=20131207T075959Z;BYDAY=WE'
         expect(json['attendees'].length).to eq 1
         expect(json['attendees'][0]['email']).to eq 'ctweney@testg.berkeley.edu.test-google-a.com'
         expect(subject[1].multi_entry_cd).to eq 'B'
         expect(subject[1].transaction_type).to eq 'C'
       end
       it 'has the meeting place and times for Biology 1a' do
-        expect(JSON.parse(subject[2].event_data)['location']).to eq 'VALLEY LSB 2030'
+        expect(JSON.parse(subject[2].event_data)['location']).to eq 'VALLEY LSB 2030, UC Berkeley'
         expect(subject[2].multi_entry_cd).to eq '-'
         expect(subject[2].transaction_type).to eq 'C'
       end

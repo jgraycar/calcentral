@@ -15,7 +15,12 @@ module Links
 
 =end
 
-    def get_feed
+    def get_feed(law_student)
+
+      # Might have to just show nothing if law_student
+      # Other option is to look into how they populate their database
+      # If it can be easily modified, that's an option still
+
       # Feed consists of two primary sections: Navigation and Links
       links = []
       navigation = []

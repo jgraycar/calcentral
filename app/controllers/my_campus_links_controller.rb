@@ -4,8 +4,11 @@ class MyCampusLinksController < ApplicationController
   before_filter :api_authenticate
 
   def get_feed
+    # ----------------- Added ---------------------
+    law_student = session[:law_student]
+    # ----------------- Added ---------------------
     json = self.class.fetch_from_cache {
-      Links::MyCampusLinks.new.get_feed.to_json
+      Links::MyCampusLinks.new.get_feed(law_student).to_json
     }
     render :json => json
   end

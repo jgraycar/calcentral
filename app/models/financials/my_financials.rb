@@ -18,6 +18,11 @@ module Financials
     # Calling to_json on a large finances structure can take a very long time, and so
     # a JSON-fied version of the feed is cached and returned instead.
     def get_feed(force_cache_write=false)
+
+      # ------------------------ Added --------------------------
+      # @law_student set in user_specific_model (hopefully)
+      # ------------------------ Added --------------------------
+
       # smart_fetch_from_cache provides helpful services like special cache handling for exceptions.
       self.class.smart_fetch_from_cache({
         force_write: force_cache_write,
