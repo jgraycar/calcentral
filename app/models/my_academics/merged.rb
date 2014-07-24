@@ -11,23 +11,43 @@ module MyAcademics
 
     def get_feed_internal
       feed = {}
-      # Provider ordering is significant! In particular, Semesters/Teaching must
-      # be merged before course sites.
-      [
-        CollegeAndLevel,
-        GpaUnits,
-        Requirements,
-        Regblocks,
-        Semesters,
-        Teaching,
-        Exams,
-        Telebears,
-        CanvasSites,
-        SakaiSites
-      ].each do |provider|
-        provider.new(@uid).merge(feed, @law_student)
+      if @law_student
+        # Provider ordering is significant! In particular, Semesters/Teaching must
+        # be merged before course sites.
+        [
+         LawCollegeAndLevel,
+         LawGpaUnits,
+         LawRequirements,
+         LawRegblocks,
+         LawSemesters,
+         LawTeaching,
+         LawExams,
+         LawTelebears,
+         LawCanvasSites,
+         LawSakaiSites
+        ].each do |provider|
+          provider.new(@uid).merge(feed)
+        end
+      else
+        # Provider ordering is significant! In particular, Semesters/Teaching must
+        # be merged before course sites.
+        [
+         CollegeAndLevel,
+         GpaUnits,
+         Requirements,
+         Regblocks,
+         Semesters,
+         Teaching,
+         Exams,
+         Telebears,
+         CanvasSites,
+         SakaiSites
+        ].each do |provider|
+          provider.new(@uid).merge(feed)
+        end
       end
       feed
     end
+
   end
 end
