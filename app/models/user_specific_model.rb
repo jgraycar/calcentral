@@ -27,14 +27,6 @@ class UserSpecificModel < AbstractModel
     # ------------------ end my added code -------------------- 
   end
 
-  def instance_key
-    if is_acting_as_nonfake_user?
-      Calcentral::PSEUDO_USER_PREFIX + @uid
-    else
-      @uid
-    end
-  end
-
   def indirectly_authenticated?
     self.class.session_indirectly_authenticated?(@options.merge(user_id: @uid))
   end
@@ -45,11 +37,6 @@ class UserSpecificModel < AbstractModel
     original_uid = session_state[:original_user_id]
     current_user = User::Auth.get(uid)
     original_uid && uid != original_uid && !current_user.is_test_user
-  end
-
-  def expire_cache
-    super
-    self.class.expire(Calcentral::PSEUDO_USER_PREFIX + @uid)
   end
 
 end
