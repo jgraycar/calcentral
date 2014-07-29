@@ -33,6 +33,9 @@ gem "json", "~> 1.8.0"
 # https://rubygems.org/gems/omniauth-cas
 gem "omniauth-cas", "~> 1.0.1"
 
+# LDAP
+gem 'net-ldap', '0.6.1'
+
 # secure_headers provides x-frame, csp and other http headers
 gem "secure_headers", "~> 0.5.0"
 
@@ -97,17 +100,17 @@ gem 'icalendar', '~> 2.1.0'
 ##################
 
 # Our very own library for angular dependency!
-gem "angular-gem", "1.2.20"
+gem "angular-gem", "1.2.21"
 
 # Datepicker
 gem "pikaday-gem", "~> 1.1.0.0"
 
 # CSS Framework - also includes Compass and SASS
 # https://github.com/zurb/foundation
-gem "sass-rails", "~> 4.0.2"
+gem "sass-rails", "~> 4.0.3"
 gem "coffee-rails", "~> 4.0.1"
-gem "compass-rails", "~> 1.1.7"
-gem "foundation-rails", "~> 5.2.2.0"
+gem "compass-rails", "~> 2.0.0"
+gem "foundation-rails", "~> 5.3.1.0"
 
 # Closure Compiler Gem for JS compression
 # https://github.com/documentcloud/closure-compiler
@@ -118,26 +121,22 @@ gem 'therubyrhino', '~> 2.0.3'
 
 # Font awesome - an icon font
 # https://github.com/bokmann/font-awesome-rails
-gem "font-awesome-rails", "~> 4.0.3.1"
+gem "font-awesome-rails", "~> 4.1.0.0"
 
 # Moment.js
 # https://github.com/derekprior/momentjs-rails
 gem "momentjs-rails", "~> 2.5.1"
 
-# Placeholder.js
-# https://github.com/ets-berkeley-edu/placeholder-gem
-gem "placeholder-gem", "~> 3.0.2"
-
 # Raven.js - library for JS error logging
-gem "ravenjs-gem", "~> 1.1.14"
+gem "ravenjs-gem", "~> 1.1.16"
 
-# ngmin-rails
-# https://github.com/jasonm/ngmin-rails
-gem "ngmin-rails", "~> 0.4.0"
+# Use ngannotate in the Rails asset pipeline.
+# https://github.com/olov/ng-annotate
+gem 'ngannotate-rails', '~> 0.9.7'
 
 # Use your angular templates with rails' asset pipeline
 # https://github.com/pitr/angular-rails-templates
-gem "angular-rails-templates", "~> 0.1.2"
+gem "angular-rails-templates", "~> 0.1.3"
 
 # Oracle adapter
 # Purposely excluding this for test environments since folks have to install ojdbc6
