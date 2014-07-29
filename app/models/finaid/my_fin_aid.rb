@@ -25,7 +25,14 @@ module Finaid
 
     def append_activities!(activities)
       proxies = TimeRange.current_years.collect do |year|
-        Finaid::Proxy.new({user_id: @uid, term_year: year})
+        if @law_student
+          # Finaid::LawProxy.new({user_id: @uid, term_year: year})
+          # For now, just don't do anything if law student.
+          # Later, edit law_proxy to get from Law School's finaid api
+          return
+        else
+          Finaid::Proxy.new({user_id: @uid, term_year: year})
+        end
       end
       return unless proxies.present? && proxies.first.lookup_student_id.present?
 
