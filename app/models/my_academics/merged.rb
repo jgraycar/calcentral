@@ -14,7 +14,7 @@ module MyAcademics
       if @law_student
         # Currently providing same information, but eventually could make different if
         # also modify what controller expects
-        [
+        providers = [
          LawCollegeAndLevel,
          LawGpaUnits,
          LawRequirements,
@@ -25,13 +25,11 @@ module MyAcademics
          LawTelebears,
          LawCanvasSites,
          LawSakaiSites
-        ].each do |provider|
-          provider.new(@uid).merge(feed)
-        end
+        ]
       else
         # Provider ordering is significant! In particular, Semesters/Teaching must
         # be merged before course sites.
-        [
+        providers = [
          CollegeAndLevel,
          GpaUnits,
          Requirements,
@@ -42,9 +40,10 @@ module MyAcademics
          Telebears,
          CanvasSites,
          SakaiSites
-        ].each do |provider|
-          provider.new(@uid).merge(feed)
-        end
+        ]
+      end
+      providers.each do |provider|
+        provider.new(@uid).merge(feed)
       end
       feed
     end
