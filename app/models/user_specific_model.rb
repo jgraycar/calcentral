@@ -10,9 +10,12 @@ class UserSpecificModel < AbstractModel
   def initialize(uid, options={})
     super(uid, options)
     @uid = uid
-    # -------------------- my added code ----------------------
-    @law_student = false
-    profile_feed = Bearfacts::Profile.new({:user_id => @uid}).get
+    @law_student = law_student?(uid)
+  end
+
+  def law_student?(uid)
+    is_law_student = false
+    profile_feed = Bearfacts::Profile.new({:user_id => uid}).get
     doc = profile_feed[:xml_doc]
     if !(doc.blank? || doc.css("studentGeneralProfile").blank?)
       general_profile = doc.css("studentGeneralProfile")
@@ -21,11 +24,12 @@ class UserSpecificModel < AbstractModel
       second_college = to_text(general_profile.css("collegeSecond"))
       third_college = to_text(general_profile.css("collegeThird"))
       if [primary_college, second_college, third_college].include? "LAW"
-        @law_student = true
+        is_law_student = true
       end
     end
-    # ------------------ end my added code -------------------- 
+    return is_law_student
   end
+    
 
   def indirectly_authenticated?
     self.class.session_indirectly_authenticated?(@options.merge(user_id: @uid))
