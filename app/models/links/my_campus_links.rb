@@ -15,12 +15,7 @@ module Links
 
 =end
 
-    def get_feed(law_student)
-
-      # Might have to just show nothing if law_student
-      # Other option is to look into how they populate their database
-      # If it can be easily modified, that's an option still
-
+    def get_feed
       # Feed consists of two primary sections: Navigation and Links
       links = []
       navigation = []
@@ -80,11 +75,12 @@ module Links
 
     # Given a link, return a dict of the user_roles allowed to view it
     def get_roles_for_link(link)
-      roles = {"student" => false, "staff" => false, "faculty" => false}
+      roles = {"student" => false, "staff" => false, "faculty" => false, "law_student" => false}
       link.user_roles.each do |linkrole|
         roles["student"] = true if linkrole.slug == "student"
         roles["staff"] = true if linkrole.slug == "staff"
         roles["faculty"] = true if linkrole.slug == "faculty"
+        roles["law_student"] = true if linkrole.slug == "law_student"
       end
       roles
     end
