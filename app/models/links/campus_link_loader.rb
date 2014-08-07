@@ -18,7 +18,7 @@ module Links
       student = Links::UserRole.find_or_create_by_name("Student", {:slug => "student"})
       staff = Links::UserRole.find_or_create_by_name("Staff", {:slug => "staff"})
       faculty = Links::UserRole.find_or_create_by_name("Faculty", {:slug => "faculty"})
-      lawStudent = Links::UserRole.find_or_create_by_name("Law Student", {slug: => "lawStudent"})
+      lawStudent = Links::UserRole.find_or_create_by_name("Law Student", {:slug => "lawStudent"})
 
       begin
         file = File.open("#{Rails.root}#{filename}")

@@ -11,7 +11,7 @@ module MyAcademics
 
     def get_feed_internal
       feed = {}
-      if @law_student
+      if law_student?
         # Currently providing same information, but eventually could make different if
         # also modify what controller expects
         providers = [

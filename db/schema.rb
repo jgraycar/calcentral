@@ -11,7 +11,10 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20140722180444) do
+ActiveRecord::Schema.define(version: 2014072218044400) do
+
+  # These are extensions that must be enabled in order to support this database
+  enable_extension "plpgsql"
 
   create_table "canvas_synchronization", force: true do |t|
     t.datetime "last_guest_user_sync"
@@ -41,9 +44,9 @@ ActiveRecord::Schema.define(version: 20140722180444) do
     t.string   "transaction_type", default: "C"
   end
 
-  add_index "class_calendar_log", ["event_id"], name: "index_class_calendar_log_on_event_id"
-  add_index "class_calendar_log", ["job_id"], name: "index_class_calendar_log_on_job_id"
-  add_index "class_calendar_log", ["year", "term_cd", "ccn", "multi_entry_cd"], name: "class_calendar_log_main_index"
+  add_index "class_calendar_log", ["event_id"], name: "index_class_calendar_log_on_event_id", using: :btree
+  add_index "class_calendar_log", ["job_id"], name: "index_class_calendar_log_on_job_id", using: :btree
+  add_index "class_calendar_log", ["year", "term_cd", "ccn", "multi_entry_cd"], name: "class_calendar_log_main_index", using: :btree
 
   create_table "class_calendar_queue", force: true do |t|
     t.integer  "year"
@@ -57,7 +60,7 @@ ActiveRecord::Schema.define(version: 20140722180444) do
     t.string   "transaction_type", default: "C"
   end
 
-  add_index "class_calendar_queue", ["year", "term_cd", "ccn", "multi_entry_cd"], name: "class_calendar_queue_main_index"
+  add_index "class_calendar_queue", ["year", "term_cd", "ccn", "multi_entry_cd"], name: "class_calendar_queue_main_index", using: :btree
 
   create_table "class_calendar_users", force: true do |t|
     t.string "uid"
@@ -71,7 +74,7 @@ ActiveRecord::Schema.define(version: 20140722180444) do
     t.datetime "updated_at"
   end
 
-  add_index "fin_aid_years", ["current_year"], name: "index_fin_aid_years_on_current_year", unique: true
+  add_index "fin_aid_years", ["current_year"], name: "index_fin_aid_years_on_current_year", unique: true, using: :btree
 
   create_table "link_categories", force: true do |t|
     t.string   "name",                       null: false
@@ -122,8 +125,8 @@ ActiveRecord::Schema.define(version: 20140722180444) do
     t.datetime "occurred_at"
   end
 
-  add_index "notifications", ["occurred_at"], name: "index_notifications_on_occurred_at"
-  add_index "notifications", ["uid"], name: "index_notifications_on_uid"
+  add_index "notifications", ["occurred_at"], name: "index_notifications_on_occurred_at", using: :btree
+  add_index "notifications", ["uid"], name: "index_notifications_on_uid", using: :btree
 
   create_table "oauth2_data", force: true do |t|
     t.string  "uid"
@@ -134,7 +137,7 @@ ActiveRecord::Schema.define(version: 20140722180444) do
     t.text    "app_data"
   end
 
-  add_index "oauth2_data", ["uid", "app_id"], name: "index_oauth2_data_on_uid_app_id", unique: true
+  add_index "oauth2_data", ["uid", "app_id"], name: "index_oauth2_data_on_uid_app_id", unique: true, using: :btree
 
   create_table "user_auths", force: true do |t|
     t.string   "uid",                          null: false
@@ -147,7 +150,7 @@ ActiveRecord::Schema.define(version: 20140722180444) do
     t.boolean  "is_viewer",    default: false, null: false
   end
 
-  add_index "user_auths", ["uid"], name: "index_user_auths_on_uid", unique: true
+  add_index "user_auths", ["uid"], name: "index_user_auths_on_uid", unique: true, using: :btree
 
   create_table "user_data", force: true do |t|
     t.string   "uid"
@@ -157,7 +160,7 @@ ActiveRecord::Schema.define(version: 20140722180444) do
     t.datetime "updated_at",     null: false
   end
 
-  add_index "user_data", ["uid"], name: "index_user_data_on_uid", unique: true
+  add_index "user_data", ["uid"], name: "index_user_data_on_uid", unique: true, using: :btree
 
   create_table "user_roles", force: true do |t|
     t.string "name"
@@ -169,15 +172,7 @@ ActiveRecord::Schema.define(version: 20140722180444) do
     t.datetime "last_visit_at", null: false
   end
 
-  add_index "user_visits", ["last_visit_at"], name: "index_user_visits_on_last_visit_at"
-  add_index "user_visits", ["uid"], name: "index_user_visits_on_uid", unique: true
-
-  create_table "user_whitelists", force: true do |t|
-    t.string   "uid"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-  end
-
-  add_index "user_whitelists", ["uid"], name: "index_user_whitelists_on_uid", unique: true
+  add_index "user_visits", ["last_visit_at"], name: "index_user_visits_on_last_visit_at", using: :btree
+  add_index "user_visits", ["uid"], name: "index_user_visits_on_uid", unique: true, using: :btree
 
 end

@@ -39,7 +39,10 @@
         if (link.roles.hasOwnProperty(i) &&
             link.roles[i] === true &&
             link.roles[i] ===  apiService.user.profile.roles[i]) {
-          return true;
+            if (i == "student" && apiService.user.profile.roles["lawStudent"]) {
+                continue;
+            }
+            return true;
         }
       }
       return false;
