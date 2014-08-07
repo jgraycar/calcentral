@@ -39,6 +39,7 @@ module CampusOracle
           :faculty => result['affiliations'].include?("EMPLOYEE-TYPE-ACADEMIC"),
           :staff => result['affiliations'].include?("EMPLOYEE-TYPE-STAFF"),
           :guest => result['affiliations'].include?("GUEST-TYPE-COLLABORATOR")
+          # :lawStudent => 
         }
         result
       else

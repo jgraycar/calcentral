@@ -4,7 +4,7 @@ module Finaid
     include ClassLogger
     include User::Student
 
-    APP_ID = "Myfinaid"
+    LAW_APP_ID = "Myfinaid_Law"
 
     attr_reader :term_year
 
