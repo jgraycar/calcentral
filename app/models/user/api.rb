@@ -12,6 +12,9 @@ module User
         @calcentral_user_data ||= User::Data.where(:uid => @uid).first
       }
       @campus_attributes ||= CampusOracle::UserAttributes.new(user_id: @uid).get_feed
+      # Setting lawStudent role here since couldn't in CampusOracle::UserAttributes
+      @campus_attributes[:roles][:lawStudent] = law_student?
+      # Uses law_student? method from UserSpecificModel
       @default_name ||= @campus_attributes['person_name']
       @first_login_at ||= @calcentral_user_data ? @calcentral_user_data.first_login_at : nil
       @first_name ||= @campus_attributes['first_name'] || ""
