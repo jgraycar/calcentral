@@ -1,9 +1,8 @@
 (function(angular) {
   'use strict';
 
-  angular.module('calcentral.directives').directive('ccShowMoreDirective', function($compile, $parse) {
+  angular.module('calcentral.directives').directive('ccShowMoreDirective', function($parse) {
     return {
-      restrict: 'A',
       replace: true,
       link: function(scope, elem, attrs) {
 
@@ -30,11 +29,10 @@
             elem.empty();
 
             if (scope[attrs.ccShowMoreLimit] < listLength) {
-              scope.nextItemsCount = Math.min(incrementDefault, listLength - scope[attrs.ccShowMoreLimit]);
+              var nextItemsCount = Math.min(incrementDefault, listLength - scope[attrs.ccShowMoreLimit]);
 
-              var el = angular.element(showMoreButtonTemplate);
-              var compiledElement = $compile(el)(scope);
-              elem.append(compiledElement);
+              var el = angular.element(showMoreButtonTemplate.replace('{{nextItemsCount}}', nextItemsCount));
+              elem.append(el);
 
               el.on('click', function() {
                 scope[attrs.ccShowMoreLimit] += incrementDefault;
@@ -46,8 +44,24 @@
         };
 
         // Check when the list has changed
-        scope.$watch(moreList, function(list) {
+        var moreListWatch = scope.$watch(moreList, function(list) {
           if (list && list.length) {
+            watchMoreLimit(list.length);
+            // If there is an extra watch, we should use that instead and cancel the list watch
+            if (attrs.ccShowMoreWatch) {
+              moreListWatch();
+            }
+          }
+        });
+
+        // Sometimes we also need to watch for extra items
+        scope.$watch($parse(attrs.ccShowMoreWatch), function(watchValue) {
+          // Don't do anything when the value we're watching for is undefined
+          if (watchValue === undefined) {
+            return;
+          }
+          var list = scope[attrs.ccShowMoreList];
+          if (list && Array.isArray(list) && list.length) {
             watchMoreLimit(list.length);
           }
         });

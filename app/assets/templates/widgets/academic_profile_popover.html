@@ -1,7 +1,7 @@
 <div
   data-ng-controller="StatusController"
   class="cc-popover-container cc-popover-status"
-  data-ng-show="studentInfo.regStatus.code!=null && api.user.profile.roles.student">
+  data-ng-show="studentInfo.regStatus.code != null && api.user.profile.roles.student">
   <button class="cc-header-icon cc-header-icon-font cc-icon-status-person"
     data-ng-class="{'cc-icon-status-person-haslayover':(hasAlerts),'cc-header-icon-selected':(api.popover.status('cc-popover-academic-status'))}"
     data-ng-click="api.util.preventBubble($event);api.popover.toggle('cc-popover-academic-status')" title="Show your status">
@@ -17,7 +17,7 @@
     <div class="cc-popover-title">
       <h4>Status</h4>
     </div>
-    <div class="cc-popover-noitems" data-ng-if="count === 0 && !statusLoading && (studentInfo.regBlock.available || !api.user.profile.features.regstatus) && minimumAmountDue <= 0">
+    <div class="cc-popover-noitems" data-ng-if="count === 0 && !statusLoading && !(studentInfo.regStatus.needsAction && !(studentInfo.regBlock.needsAction || studentInfo.regBlock.errored) && api.user.profile.features.regstatus) && minimumAmountDue <= 0">
       <i class="cc-left fa fa-check-circle cc-icon-green"></i>
       <strong>No Active Alerts</strong>
     </div>
