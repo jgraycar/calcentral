@@ -13,7 +13,7 @@ module Advising
     end
 
     def get
-      self.class.smart_fetch_from_cache({id: @uid, user_message_on_exception: 'An error occurred retrieving data for Advisor Appointments. Please try again later.'}) do
+      self.class.smart_fetch_from_cache({id: @uid, user_message_on_exception: 'Failed to connect with your department\'s advising system.'}) do
         internal_get
       end
     end
@@ -29,6 +29,8 @@ module Advising
         return {}
       end
 
+      status_code = 200
+
       if @fake
         logger.info "Fake = #@fake, getting data from JSON fixture file; user #{@uid}; cache expiration #{self.class.expires_in}"
         json = File.read(Rails.root.join('fixtures', 'json', 'advising.json').to_s)
@@ -40,21 +42,25 @@ module Advising
             url,
             basic_auth: {username: @settings.username, password: @settings.password},
             timeout: Settings.application.outgoing_http_timeout,
-            verify: Rails.env.production?
+            verify: Settings.application.layer == 'production'
           )
         end
-        if response.code >= 400
+        status_code = response.code
+        if response.code >= 400 && response.code != 404
           raise Errors::ProxyError.new("Connection failed: #{response.code} #{response.body}; url = #{url}", {
-            body: 'An error occurred retrieving data for Advisor Appointments. Please try again later.',
+            body: 'Failed to connect with your department\'s advising system.',
             statusCode: response.code
           })
+        elsif response.code == 404
+          logger.debug "404 response from advising API for user #{@uid}"
+          json = '{"body": "No advising data could be found for your account."}'
         else
           json = response.body
         end
         logger.debug "Advising remote response: #{response.inspect}"
       end
       {
-        statusCode: 200
+        statusCode: status_code
       }.merge(HashConverter.camelize(safe_json(json)))
     end
 

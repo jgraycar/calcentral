@@ -17,6 +17,7 @@ application:
   fake_proxies_enabled: true
   # timeout (in seconds) for outgoing http request establishment
   outgoing_http_timeout: 30
+  layer: development
 
 cas_server: 'https://auth.berkeley.edu/cas'
 cas_logout_url: 'https://auth.berkeley.edu/cas/logout'
@@ -125,7 +126,8 @@ financials_proxy:
 
 textbooks_proxy:
   fake: false
-  base_url: "http://www.bkstr.com"
+  base_url: "https://berkeley.textbooktech.com"
+  token: secret set per deployment layer
 
 playlists_warehouse_proxy:
   fake: false
@@ -253,7 +255,7 @@ features:
   profile_page: false
   reauthentication: true
   audio: false
-  regstatus: false
+  regstatus: true
   advising: false
 
 youtube_splash_id: 'EQ-a7xrfVag'

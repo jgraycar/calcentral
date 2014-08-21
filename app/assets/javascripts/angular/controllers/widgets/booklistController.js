@@ -5,49 +5,57 @@
   /**
    * Textbook controller
    */
-  angular.module('calcentral.controllers').controller('BooklistController', function($http, $scope, $q) {
+  angular.module('calcentral.controllers').controller('BooklistController', function($http, $routeParams, $scope, $q) {
     $scope.semesterBooks = [];
+    var requests = [];
 
-    var getSemesterTextbooks = function(semesters) {
-      var semester;
-      for (var s = 0; s < semesters.length; s++) {
-        semester = semesters[s];
-        if (semester.timeBucket === 'current') {
-          break;
+    var getSemester = function(semesters) {
+      for (var i = 0; i < semesters.length; i++) {
+        var semester = semesters[i];
+        if (semester.slug === $routeParams.semesterSlug) {
+          return semester;
         }
       }
-      var requests = [];
+    };
 
-      function getTextbook(courseInfo, courseNumber) {
-        return $http.get('/api/my/textbooks_details', {params: courseInfo}).success(function(books) {
-          if (books) {
-            books.course = courseNumber;
-            $scope.semesterBooks.push(books);
-            $scope.semesterBooks.sort(function(a, b) {
-              return a.course.localeCompare(b.course);
-            });
-            $scope.semesterBooks.hasBooks = true;
-          }
+    var getTextbook = function(courseInfo, courseNumber) {
+      return $http.get('/api/my/textbooks_details', {params: courseInfo}).success(function(books) {
+        books.course = courseNumber;
+        $scope.semesterBooks.push(books);
+        $scope.semesterBooks.sort(function(a, b) {
+          return a.course.localeCompare(b.course);
         });
-      }
+      });
+    };
 
+    var returnSection = function(section) {
+      return section.section_number;
+    };
+
+    var addToRequests = function(semester) {
       for (var c = 0; c < semester.classes.length; c++) {
         // get textbooks for each course
-        var ccns = [];
         var selectedCourse = semester.classes[c];
-        for (var i = 0; i < selectedCourse.sections.length; i++) {
-          ccns.push(selectedCourse.sections[i].ccn);
-        }
+        var sectionNumbers = selectedCourse.sections.map(returnSection);
 
         var courseInfo = {
-          'ccns[]': ccns,
+          'sectionNumbers[]': sectionNumbers,
+          'department': selectedCourse.dept,
+          'courseCatalog': selectedCourse.courseCatalog,
           'slug': semester.slug
         };
 
-        requests.push(getTextbook(courseInfo, semester.classes[c].course_code));
+        requests.push(getTextbook(courseInfo, selectedCourse.course_code));
       }
+    };
+
+    var getSemesterTextbooks = function(semesters) {
+      var semester = getSemester(semesters);
+      addToRequests(semester);
+
       $scope.semesterName = semester.name;
       $scope.semesterSlug = semester.slug;
+
       $q.all(requests).then(function() {
         $scope.isLoading = false;
       });

@@ -1,11 +1,11 @@
 source 'https://rubygems.org'
 
 # bundler, for managing dependencies
-gem 'bundler', '~> 1.6.1'
+gem 'bundler', '~> 1.7.0'
 
 # The core framework
 # https://github.com/rails/rails
-gem 'rails', '4.1.4'
+gem 'rails', '4.1.5'
 
 gem 'actionpack-action_caching', '~>1.1.1'
 gem 'actionpack-page_caching', '~>1.0.2'
@@ -37,7 +37,7 @@ gem 'omniauth-cas', '~> 1.0.1'
 gem 'net-ldap', '~> 0.7.0'
 
 # secure_headers provides x-frame, csp and other http headers
-gem 'secure_headers', '~> 0.5.0'
+gem 'secure_headers', '~> 1.3.3'
 
 gem 'faraday', '~> 0.9.0'
 gem 'faraday_middleware', '~> 0.9.1'
@@ -101,7 +101,7 @@ gem 'icalendar', '~> 2.1.1'
 ##################
 
 # Our very own library for angular dependency!
-gem 'angular-gem', '1.2.21'
+gem 'angular-gem', '1.2.22'
 
 # Datepicker
 gem 'pikaday-gem', '~> 1.2.0'
@@ -136,7 +136,7 @@ gem 'natural-sort-js', '~> 0.7.0'
 
 # Use ngannotate in the Rails asset pipeline.
 # https://github.com/olov/ng-annotate
-gem 'ngannotate-rails', '~> 0.9.9'
+gem 'ngannotate-rails', '~> 0.9.11'
 
 # Use your angular templates with rails' asset pipeline
 # https://github.com/pitr/angular-rails-templates

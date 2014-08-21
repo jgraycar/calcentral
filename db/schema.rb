@@ -11,13 +11,14 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20140722180444) do
+ActiveRecord::Schema.define(version: 20140815155903) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
   create_table "canvas_synchronization", force: true do |t|
     t.datetime "last_guest_user_sync"
+    t.datetime "latest_term_enrollment_csv_set"
   end
 
   create_table "class_calendar_jobs", force: true do |t|
@@ -44,9 +45,8 @@ ActiveRecord::Schema.define(version: 20140722180444) do
     t.string   "transaction_type", default: "C"
   end
 
-  add_index "class_calendar_log", ["event_id"], name: "index_class_calendar_log_on_event_id", using: :btree
-  add_index "class_calendar_log", ["job_id"], name: "index_class_calendar_log_on_job_id", using: :btree
-  add_index "class_calendar_log", ["year", "term_cd", "ccn", "multi_entry_cd"], name: "class_calendar_log_main_index", using: :btree
+  add_index "class_calendar_log", ["event_id"], name: "index_class_calendar_log_on_event_id"
+  add_index "class_calendar_log", ["year", "term_cd", "ccn", "multi_entry_cd", "job_id"], name: "class_calendar_log_unique_index", unique: true, using: :btree
 
   create_table "class_calendar_queue", force: true do |t|
     t.integer  "year"
@@ -60,7 +60,7 @@ ActiveRecord::Schema.define(version: 20140722180444) do
     t.string   "transaction_type", default: "C"
   end
 
-  add_index "class_calendar_queue", ["year", "term_cd", "ccn", "multi_entry_cd"], name: "class_calendar_queue_main_index", using: :btree
+  add_index "class_calendar_queue", ["year", "term_cd", "ccn", "multi_entry_cd"], name: "class_calendar_queue_unique_index", unique: true, using: :btree
 
   create_table "class_calendar_users", force: true do |t|
     t.string "uid"
