@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20140815155903) do
+ActiveRecord::Schema.define(version: 2014072218044400) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -45,7 +45,7 @@ ActiveRecord::Schema.define(version: 20140815155903) do
     t.string   "transaction_type", default: "C"
   end
 
-  add_index "class_calendar_log", ["event_id"], name: "index_class_calendar_log_on_event_id"
+  add_index "class_calendar_log", ["event_id"], name: "index_class_calendar_log_on_event_id", using: :btree
   add_index "class_calendar_log", ["year", "term_cd", "ccn", "multi_entry_cd", "job_id"], name: "class_calendar_log_unique_index", unique: true, using: :btree
 
   create_table "class_calendar_queue", force: true do |t|
@@ -174,5 +174,13 @@ ActiveRecord::Schema.define(version: 20140815155903) do
 
   add_index "user_visits", ["last_visit_at"], name: "index_user_visits_on_last_visit_at", using: :btree
   add_index "user_visits", ["uid"], name: "index_user_visits_on_uid", unique: true, using: :btree
+
+  create_table "user_whitelists", force: true do |t|
+    t.string   "uid"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
+  add_index "user_whitelists", ["uid"], name: "index_user_whitelists_on_uid", unique: true, using: :btree
 
 end

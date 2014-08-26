@@ -8,7 +8,7 @@ describe Canvas::SiteMembershipsMaintainer do
   let(:known_users) { [] }
   let(:uid) { random_id }
   let(:sis_section_id) {"SEC:2014-B-#{course_id}"}
-  let(:sis_section_ids) { [sis_section_id] }
+  let(:sis_section_ids) { [sis_section_id, "2014-D-04124", 'bababooey'] }
   subject {
     Canvas::SiteMembershipsMaintainer.process(course_id, sis_section_ids, enrollments_csv, users_csv, known_users, batch_mode, cached_enrollments_provider)
     enrollments_csv
@@ -95,8 +95,9 @@ describe Canvas::SiteMembershipsMaintainer do
     end
 
     describe 'teacher roles based on section types' do
-      let(:ccn_to_uid) { {random_id => random_id, random_id => random_id} }
-      let(:sis_section_ids) { ["SEC:2014-B-#{ccn_to_uid.keys[0]}", "SEC:2014-B-#{ccn_to_uid.keys[1]}"] }
+      let(:ccn_to_uid) { {rand(9999).to_s => random_id, random_id => random_id} }
+      # CCNs in sis_section_ids are often zero-padded.
+      let(:sis_section_ids) { ["SEC:2014-B-0#{ccn_to_uid.keys[0]}", "SEC:2014-B-#{ccn_to_uid.keys[1]}"] }
       before do
         allow(CampusOracle::Queries).to receive(:get_enrolled_students).and_return([])
         allow(CampusOracle::Queries).to receive(:get_section_instructors) do |term_yr, term_cd, ccn|

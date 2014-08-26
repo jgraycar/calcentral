@@ -1,4 +1,5 @@
 class UserSpecificModel < AbstractModel
+  attr_reader :authentication_state
 
   def self.from_session(session_state)
     self.new(session_state[:user_id], {
@@ -10,6 +11,7 @@ class UserSpecificModel < AbstractModel
   def initialize(uid, options={})
     super(uid, options)
     @uid = uid
+    @authentication_state = AuthenticationState.new(@options.merge(user_id: @uid))
     @law_student = false
     profile_feed = Bearfacts::Profile.new({:user_id => uid}).get
     doc = profile_feed[:xml_doc]
@@ -34,16 +36,8 @@ class UserSpecificModel < AbstractModel
     return @law_student
   end
 
-  def indirectly_authenticated?
-    self.class.session_indirectly_authenticated?(@options.merge(user_id: @uid))
-  end
-
-  def self.session_indirectly_authenticated?(session_state)
-    return true if session_state[:lti_authenticated_only]
-    uid = session_state[:user_id]
-    original_uid = session_state[:original_user_id]
-    current_user = User::Auth.get(uid)
-    original_uid && uid != original_uid && !current_user.is_test_user
+  def directly_authenticated?
+    @authentication_state.directly_authenticated?
   end
 
 end

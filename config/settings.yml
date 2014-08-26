@@ -72,6 +72,8 @@ canvas_proxy:
   test_user_id: "300846"
   test_user_access_token: "someMumboJumbo"
   mixed_sis_user_id: true
+  # Set to false to disable synchronization of obfuscated names in Dev/QA.
+  maintain_user_names: true
 ldap:
   host: 'nds.berkeley.edu'
   port: 636
@@ -144,7 +146,7 @@ blog_latest_release_notes_feed_proxy:
 
 app_alerts_proxy:
   fake: false
-  feed_url: "http://ets-dev.berkeley.edu/calcentral-alerts/feed"
+  feed_url: "http://ets.berkeley.edu/calcentral-alerts/feed"
 
 cal1card_proxy:
   fake: false
@@ -192,7 +194,6 @@ cache:
     Canvas::CourseStudents: <%= 15.minutes %>
     Canvas::CourseTeachers: <%= 5.minutes %>
     CanvasCourseProvisioningJobs: <%= 24.hours %>
-    Bearfacts::MyRegBlocks: 0
 
     Berkeley::Terms: <%= 4.hours %>
     Finaid::TimeRange: <%= 4.hours %>
@@ -294,6 +295,6 @@ ui_selenium:
 
 advising_proxy:
   fake: false
-  base_url: 'https://ua.berkeley.edu/api'
+  base_url: 'https://bhive.berkeley.edu/api'
   username: secret
   password: secret

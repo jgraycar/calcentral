@@ -7,12 +7,23 @@ class SessionsController < ApplicationController
     auth = request.env["omniauth.auth"]
     auth_uid = auth['uid']
     if params[:renew] == 'true'
-      if session[:original_user_id] && session[:original_user_id] != auth_uid
-        logger.warn "ACT-AS: Active user session for #{session[:original_user_id]} exists, but CAS is giving us a different UID: #{auth_uid}. Logging user out."
-        logout
-        return redirect_to Settings.cas_logout_url
+      # If we're reauthenticating due to view-as, then the CAS-provided UID should match
+      # the session's "original_user_id".
+      if session[:original_user_id]
+        if session[:original_user_id] != auth_uid
+          logger.warn "ACT-AS: Active user session for #{session[:original_user_id]} exists, but CAS is giving us a different UID: #{auth_uid}. Logging user out."
+          logout
+          return redirect_to Settings.cas_logout_url
+        else
+          create_reauth_cookie
+        end
+      elsif session[:user_id] != auth_uid
+        # If we're reauthenticating for any other reason, then the CAS-provided UID should
+        # match the session "user_id" from the previous authentication.
+        logger.warn "REAUTHENTICATION: Active user session for #{session[:user_id]} exists, but CAS is giving us a different UID: #{auth_uid}. Starting new session."
+        reset_session
       else
-        cookies[:reauthenticated] = {:value => true, :expires => 8.hours.from_now}
+        create_reauth_cookie
       end
     else
       if session[:lti_authenticated_only] && session[:user_id] != auth_uid
@@ -25,6 +36,10 @@ class SessionsController < ApplicationController
       reset_session
     end
     continue_login_success auth_uid
+  end
+
+  def create_reauth_cookie
+    cookies[:reauthenticated] = {:value => true, :expires => 8.hours.from_now}
   end
 
   def reauth_admin
@@ -71,7 +86,8 @@ class SessionsController < ApplicationController
       logger.warn "FAILED login with CAS UID: #{uid}"
       redirect_to url_for_path('/uid_error')
     else
-      session[:user_id] = (acting_as?) ? act_as_uid : uid
+      # Unless we're re-authenticating after view-as, initialize the session.
+      session[:user_id] = uid unless session[:original_user_id]
       redirect_to smart_success_path, :notice => "Signed in!"
     end
   end
