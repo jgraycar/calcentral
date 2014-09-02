@@ -1,7 +1,10 @@
 <div class="cc-widget">
   <div class="cc-widget-title">
     <h2 class="cc-left">Semesters</h2>
-    <a href="https://telebears.berkeley.edu/tranreq/" class="cc-right cc-widget-title-link">
+    <a data-ng-if="!isLawStudent" href="https://telebears.berkeley.edu/tranreq/" class="cc-right cc-widget-title-link">
+      <strong>Order Transcripts</strong>
+    </a>
+    <a data-ng-if="isLawStudent" href="http://www.law.berkeley.edu/php-programs/registrar/forms/transcriptrequestform.php" class="cc-right cc-widget-title-link">
       <strong>Order Transcripts</strong>
     </a>
   </div>
