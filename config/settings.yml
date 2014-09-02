@@ -72,6 +72,9 @@ canvas_proxy:
   test_user_id: "300846"
   test_user_access_token: "someMumboJumbo"
   mixed_sis_user_id: true
+  # Set to any string to make integration scripts create CSV files and log intended updates
+  # without actually changing anything in Canvas.
+  dry_run_import: <%= ENV['CANVAS_DRY_RUN_IMPORT'] || '' %>
   # Set to false to disable synchronization of obfuscated names in Dev/QA.
   maintain_user_names: true
 ldap:
@@ -128,7 +131,7 @@ financials_proxy:
 
 textbooks_proxy:
   fake: false
-  base_url: "https://berkeley.textbooktech.com"
+  base_url: "https://calstudentstore.berkeley.edu"
   token: secret set per deployment layer
 
 playlists_warehouse_proxy:
@@ -189,6 +192,7 @@ cache:
     MyTasks::Merged: 0
     UpNext::MyUpNext: 0
     User::Api: 0
+    User::Photo: <%= 24.hours %>
     UserApiController: <%= 4.hours %>
     Canvas::Lti: <%= 5.minutes %>
     Canvas::CourseStudents: <%= 15.minutes %>
@@ -253,7 +257,6 @@ features:
   videos: false
   app_alerts: false
   cal1card: false
-  profile_page: false
   reauthentication: true
   audio: false
   regstatus: true
@@ -281,17 +284,23 @@ class_calendar:
 ui_selenium:
   baseUrl: https://calcentral-dev.berkeley.edu
   calNetUrl: https://auth-test.berkeley.edu
+  googleAuthUrl: /api/google/request_authorization?force_domain=false
 
   # Alternative browsers for Selenium tests: chrome, safari, ie
   webDriver: firefox
 
-  pageEventTimeout: 1
-  pageLoadTimeout: 5
+  googleTaskTimeout: 5
+  pageEventTimeout: 3
+  pageLoadTimeout: 8
   finResourcesLinksTimeout: 10
   financialsTimeout: 5
   test_user_password: secret
   oski_username: secret
   oski_password: secret
+  ets_qa_ldap_username: secret
+  ets_qa_ldap_password: secret
+  ets_qa_gmail_username: secret
+  ets_qa_gmail_password: secret
 
 advising_proxy:
   fake: false

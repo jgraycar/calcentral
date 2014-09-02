@@ -21,4 +21,8 @@ class BaseProxy
     student.try(:[], "student_id")
   end
 
+  def verify_ssl?
+    Settings.application.layer == 'production'
+  end
+
 end

@@ -3,7 +3,7 @@
     <h2 class="cc-left">Advising Appointments</h2>
     <a data-ng-if="urlToMakeAppointment" class="cc-button cc-right cc-widget-title-button" data-ng-href="{{urlToMakeAppointment}}">
       <i class="fa fa-plus cc-button-plus-icon"></i>
-      <span>New Appointment</span>
+      <span>New</span>
     </a>
   </div>
 
@@ -28,7 +28,7 @@
                   <strong data-ng-bind="appointment.dateTime | date:'MM/dd'"></strong><br />
                   <span data-ng-bind="appointment.dateTime | date:'h:mm a'" class="cc-text-light"></span>
                 </div>
-                <div class="cc-widget-lsadvising-current-content cc-left">
+                <div class="cc-widget-lsadvising-current-content">
                   <strong data-ng-bind="appointment.staff.name"></strong>
                   <div class="cc-text-light cc-uppercase">
                     <span data-ng-bind="appointment.method"></span>
@@ -69,7 +69,7 @@
         <div data-cc-show-more-directive data-cc-show-more-list="pastAppointments" data-cc-show-more-limit="pastAppointmentsLimit"></div>
       </div>
 
-      <div data-ng-if="!caseloadAdviser && !futureAppointments && !pastAppointments && !lsAdvisingError">
+      <div data-ng-if="!caseloadAdviser && !futureAppointments.length && !pastAppointments.length && !lsAdvisingError">
        No current advisor or appointment. <a data-ng-if="urlToMakeAppointment" data-ng-href="{{urlToMakeAppointment}}">Create a new appointment</a>.
       </div>
       <div class="cc-error-message" data-ng-if="lsAdvisingError.body" data-ng-bind="lsAdvisingError.body">
