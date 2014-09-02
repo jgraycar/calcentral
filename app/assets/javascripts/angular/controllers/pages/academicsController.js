@@ -302,6 +302,19 @@
       }
     };
 
+    var isLawStudent = function(collegeAndLevel) {
+      if (!collegeAndLevel || !collegeAndLevel.colleges
+          || collegeAndLevel.standing === 'Undergraduate') {
+        return false;
+      }
+
+      for (var i = 0; i < collegeAndLevel.colleges.length; i++) {
+        if(collegeAndLevel.colleges[i].college === 'School of Law') {
+          return true;
+        }
+      }
+    };
+
     var parseAcademics = function(data) {
       angular.extend($scope, data);
 
