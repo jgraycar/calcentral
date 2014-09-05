@@ -12,6 +12,7 @@ module Textbooks
       @slug = options[:slug]
       @term = get_term(@slug)
 
+      # Could maybe have if statement here, call diff API
       super(Settings.textbooks_proxy, options)
     end
 
@@ -19,15 +20,7 @@ module Textbooks
     def google_book(isbn)
       google_book_url = 'https://www.googleapis.com/books/v1/volumes?q=isbn:' + isbn
       google_response = {}
-      response = ActiveSupport::Notifications.instrument('proxy', {
-        url: google_book_url ,
-        class: self.class }) do
-          HTTParty.get(
-            google_book_url,
-            timeout: Settings.application.outgoing_http_timeout,
-            verify: verify_ssl?
-        )
-      end
+      response = get_response(google_book_url)
 
       if response['totalItems'] > 0
         item = response['items'][0]
@@ -37,7 +30,7 @@ module Textbooks
         }
       end
 
-      return google_response
+      google_response
     end
 
     def process_material(material, sections_with_books)
@@ -146,12 +139,10 @@ module Textbooks
 
       url = bookstore_link(section_numbers)
       logger.info "Fake = #@fake; Making request to #{url}; cache expiration #{self.class.expires_in}"
-      response = HTTParty.get(
-        url,
+      response = get_response(url,
         headers: {
           "Authorization" => "Token token=#{Settings.textbooks_proxy.token}"
-        },
-        timeout: Settings.application.outgoing_http_timeout
+        }
       )
       logger.debug "Remote server status #{response.code}; url = #{url}"
       if response.code >= 400

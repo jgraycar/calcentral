@@ -1,0 +1,309 @@
+logger:
+  level: <%= ENV['LOGGER_LEVEL'] || WARN %>
+  stdout: <%= ENV['LOGGER_STDOUT'] %>
+  slow_query_threshold_in_ms: 250
+  slow_request_threshold_in_ms: 60000
+  proxy_threshold_in_ms: 1000
+
+application:
+  # Set to true if testing production env without Apache/Nginx
+  serve_static_assets: false
+  # Set to "https://" if running behind Apache/Nginx + https
+  protocol: "http://"
+  fake_cas: false
+  fake_cas_id: "1" # Change this to the UID you want to fake cas auth with.
+  # Neither VCR nor WebMock are thread-safe, and so fake proxy support should
+  # be disabled when no fakes are needed (e.g., in production).
+  fake_proxies_enabled: true
+  # timeout (in seconds) for outgoing http request establishment
+  outgoing_http_timeout: 30
+  layer: development
+
+cas_server: 'https://auth.berkeley.edu/cas'
+cas_logout_url: 'https://auth.berkeley.edu/cas/logout'
+
+# Database settings
+postgres:
+  database: calcentral_production
+  username: calcentral_production
+  password: secret
+  host: localhost
+  port: 5432
+  pool: 95
+
+campusdb:
+  adapter: h2
+  driver: org.h2.Driver
+  url: jdbc:h2:mem:h2CampusOracle::CampusDataSource;DB_CLOSE_DELAY=-1;MODE=Oracle
+  username: sa
+  password: sa
+  pool: 95
+  # Needed when the bSpace application tables are in a different namespace.
+  bspace_prefix:
+terms:
+  # Limit how far back our academic history goes.
+  oldest: spring-2010
+  # Timestamp in UTC, needed when testing against test Campus data.
+  # Can also be used to force selection of a "current term" different
+  # from the default.
+  fake_now:
+test_sqlite:
+  pool: 3
+
+# Proxy support
+freshen_vcr: <%= ENV['freshen_vcr'] %>
+# MUST BE SET FOR DEVELOPMENT & PRODUCTION
+# Example generated with SecureRandom.base64(32)
+oauth2:
+  key: "IeGpe9iq27Glqujd8pGH1+xM8C/ofm97Lp74N+6cN0I="
+  encryption: "aes-256-cbc"
+
+# Proxy settings
+# Set "fake: true" for any inaccessible ones
+canvas_proxy:
+  admin_access_token: "someMumboJumbo"
+  url_root: "http://localhost:12345"
+  fake: false
+  account_id: '90242'
+  export_directory: 'tmp/canvas'
+  lti_key: 'someMumboJumbo'
+  lti_secret: 'someMumboJumbo'
+  # Only used for testing + recording responses
+  test_user_id: "300846"
+  test_user_access_token: "someMumboJumbo"
+  mixed_sis_user_id: true
+  # Set to any string to make integration scripts create CSV files and log intended updates
+  # without actually changing anything in Canvas.
+  dry_run_import: <%= ENV['CANVAS_DRY_RUN_IMPORT'] || '' %>
+  # Set to false to disable synchronization of obfuscated names in Dev/QA.
+  maintain_user_names: true
+ldap:
+  host: 'nds.berkeley.edu'
+  port: 636
+  application_bind: 'uid=someApp,ou=applications,dc=berkeley,dc=edu'
+  application_password: 'someMumboJumbo'
+google_proxy:
+  client_id: 1
+  client_secret: 'someMumboJumbo'
+  fake: false
+  #Maps to tammi.chang.clc@gmail.com. Used for testing + recording responses
+  test_user_access_token: "someMumboJumbo"
+  test_user_refresh_token: "someMumboJumbo"
+  atom_mail_feed_url: "https://mail.google.com/mail/feed/atom/"
+sakai_proxy:
+  host: "https://sakai-dev.berkeley.edu"
+  fake: false
+  fake_user_id: "300939"
+  # Timestamp in UTC, needed when testing against older DB snapshot
+  fake_now:
+cal_link_proxy:
+  fake: false
+  base_url: "https://callink.berkeley.edu"
+  public_key: secret set in production
+  private_key: secret set in production
+
+bearfacts_proxy:
+  fake: false
+  token: secret set per deployment layer
+  app_id: '60388ee2'
+  app_key: 'b1b0f11f493da308175c024b15f47d87'
+  base_url: "https://apis-dev.berkeley.edu/bearfacts-apis"
+
+research_user_proxy:
+  fake: false
+  base_url: "https://hub-qa.berkeley.edu/alfresco/service/api/ucb/person"
+  site_url: "https://hub-qa.berkeley.edu/page/site"
+  username: "secret"
+  password: "secret"
+
+myfinaid_proxy:
+  fake: false
+  token: secret set per deployment layer
+  app_id: ''
+  app_key: ''
+  base_url: "https://apis-qa.berkeley.edu/myfinaid"
+
+financials_proxy:
+  fake: false
+  base_url: "https://integration-qa.berkeley.edu/cfv"
+  username: ''
+  password: ''
+
+textbooks_proxy:
+  fake: false
+  base_url: "https://calstudentstore.berkeley.edu"
+  token: secret set per deployment layer
+
+playlists_warehouse_proxy:
+  fake: false
+  base_url: 'https://video-dev.ets.berkeley.edu/warehouse/webcast.json'
+  username: secret
+  password: secret
+
+audio_proxy:
+  base_url: 'https://wbe-itunes.berkeley.edu'
+
+blog_latest_release_notes_feed_proxy:
+  fake: false
+  feed_url: "https://ets.berkeley.edu/taxonomy/term/788/all/feed"
+
+app_alerts_proxy:
+  fake: false
+  feed_url: "http://ets.berkeley.edu/calcentral-alerts/feed"
+
+cal1card_proxy:
+  fake: false
+  feed_url: 'https://webstage.housing.berkeley.edu/c1c/dyn/csc.asp'
+  username: 'secret'
+  password: 'secret'
+
+# Analytics settings ID
+# This will need to be different for every server (dev/qa/production)
+google_analytics_id: UA-XXXXXX-X
+
+# Sentry URL
+# We use https://getsentry.com for our JavaScript Error logging
+sentry_url: "https://facf7ad7bd7047f0a356e9322107ce50@app.getsentry.com/7185"
+
+# Cache settings. 0 means never expire.
+# WARNING: memcached's upper limit is 30 days. Specifying longer expiration than that will
+# result in entries expiring instantly.
+cache:
+  # Array of server addresses in cluster (for memcached)
+  servers: ["localhost"]
+  maximum_expires_in: <%= 29.days %>
+  race_condition_ttl: <%= 10.seconds %>
+  stale_connection_flush_interval: <%= 30.seconds %>
+  store: "memcached"
+  log_level: <%= Logger::ERROR %>
+  expiration:
+    default: <%= 35.minutes %>
+    failure: <%= 30.seconds %>
+    Cache::FeedUpdateWhiteboard: <%= 5.minutes %>
+    LiveUpdatesWarmer: <%= 2.minutes %>
+    MyAcademics::Merged: 0
+    MyActivities::Merged: 0
+    MyBadges::Merged: 0
+    MyCampusLinksController: 0
+    MyClasses::Merged: 0
+    Finaid::MyFinAid: 0
+    Cal1card::MyCal1card: 0
+    MyGroups::Merged: 0
+    MyTasks::Merged: 0
+    UpNext::MyUpNext: 0
+    User::Api: 0
+    User::Photo: <%= 24.hours %>
+    UserApiController: <%= 4.hours %>
+    Canvas::Lti: <%= 5.minutes %>
+    Canvas::CourseStudents: <%= 15.minutes %>
+    Canvas::CourseTeachers: <%= 5.minutes %>
+    CanvasCourseProvisioningJobs: <%= 24.hours %>
+
+    Berkeley::Terms: <%= 4.hours %>
+    Finaid::TimeRange: <%= 4.hours %>
+
+    Canvas::MergedUserSites: <%= 15.minutes %>
+    Canvas::UserCourses: <%= 30.minutes %>
+    Canvas::Groups: <%= 30.minutes %>
+    Canvas::UserActivityStream: <%= 10.minutes %>
+    Canvas::Todo: <%= 20.minutes %>
+    Canvas::UpcomingEvents: <%= 20.minutes %>
+
+    Sakai::SakaiMergedUserSites: <%= 30.minutes %>
+    Sakai::SiteAnnouncements: <%= 30.minutes %>
+
+    MyBadges::GoogleCalendar: <%= 4.minutes %>
+    MyBadges::GoogleDrive: <%= 10.minutes %>
+    MyBadges::GoogleMail: <%= 4.minutes %>
+
+    MyTasks::GoogleTasks: <%= 4.minutes %>
+
+    CalLink::Memberships: <%= 4.hours %>
+    CalLink::Organization: <%= 4.hours %>
+
+    Textbooks::Proxy: <%= 24.hours %>
+    EtsBlog::Alerts: <%= 2.minutes %>
+
+# Cache warmer settings
+cache_warmer:
+  # Number to decrement db pool to limit the number of warmer threads
+  fudge_factor: 1
+
+# Bearfacts JMS event queue
+ist_jms:
+  url: tcp://localhost:61616
+  queue: testqueue
+#  username: USERNAME
+#  password: PASSWORD
+  freshen_recording: false
+  fake: true
+  enabled: true
+
+# This will enable http basic auth for the app and should NEVER be enabled in production
+developer_auth:
+  enabled: false
+  password: topsecret!
+
+hot_plate:
+  last_visit_cutoff: <%= 10.days %>
+  enabled: true
+
+# feature toggles. If a feature's key is false OR nil, it's disabled.
+features:
+  my_fin_aid: false
+  activity_to_task: false
+  research: false
+  textbooks: false
+  videos: false
+  app_alerts: false
+  cal1card: false
+  reauthentication: true
+  audio: false
+  regstatus: true
+  advising: false
+
+youtube_splash_id: 'EQ-a7xrfVag'
+
+oec:
+  export_directory: 'tmp/oec'
+  current_terms_codes: [{
+    year: 2013,
+    code: "D"
+  }]
+  departments: [ 'STAT', 'SPANISH', 'PORTUG', 'CHEM' ]
+
+class_calendar:
+  access_token: secret
+  refresh_token: secret
+  current_terms_codes: [{
+      year: 2013,
+      code: "D"
+    }]
+  departments: [ 'BIOLOGY', 'CHEM' ]
+
+ui_selenium:
+  baseUrl: https://calcentral-dev.berkeley.edu
+  calNetUrl: https://auth-test.berkeley.edu
+  googleAuthUrl: /api/google/request_authorization?force_domain=false
+
+  # Alternative browsers for Selenium tests: chrome, safari, ie
+  webDriver: firefox
+
+  googleTaskTimeout: 5
+  pageEventTimeout: 3
+  pageLoadTimeout: 8
+  finResourcesLinksTimeout: 10
+  financialsTimeout: 5
+  test_user_password: secret
+  oski_username: secret
+  oski_password: secret
+  ets_qa_ldap_username: secret
+  ets_qa_ldap_password: secret
+  ets_qa_gmail_username: secret
+  ets_qa_gmail_password: secret
+
+advising_proxy:
+  fake: false
+  base_url: 'https://bhive.berkeley.edu/api'
+  username: secret
+  password: secret

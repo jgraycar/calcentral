@@ -52,18 +52,18 @@
         <strong data-ng-bind="api.user.profile.fullName"></strong>
       </div>
 
-      <div class="cc-widget-profile-content-gpa" data-ng-if="gpaUnits.cumulativeGpa !== null && !isLawStudent">
+      <div class="cc-widget-profile-content-gpa" data-ng-if="gpaUnits.cumulativeGpa !== null && gpaUnits.cumulativeGpa > 0 && !isLawStudent">
         <span data-ng-bind="gpaUnits.cumulativeGpa"></span>
         GPA
       </div>
 
       <div data-ng-repeat="college in collegeAndLevel.colleges">
-        <span class="cc-text-light" data-ng-bind="college.college"></span><br />
-        <span data-ng-bind="college.major"></span>
+        <div class="cc-text-light" data-ng-if="college.college" data-ng-bind="college.college"></div>
+        <div data-ng-bind="college.major"></div>
       </div>
     </div>
 
-    <div class="cc-table cc-table-top-border">
+    <div class="cc-table cc-table-top-border cc-clearfix">
       <table>
         <thead>
           <tr>
@@ -87,7 +87,7 @@
         <thead>
           <tr>
             <th width="87px">Level</th>
-            <th width="40%" class="cc-table-subheader" scope="col">
+            <th data-ng-attr-width="{{ isUndergraduate && '40%' }}" class="cc-table-subheader" scope="col">
               <span data-ng-if="isUndergraduate">Including AP</span>
               <span data-ng-if="!isUndergraduate">Current</span>
             </th>
