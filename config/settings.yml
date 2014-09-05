@@ -105,8 +105,8 @@ cal_link_proxy:
 bearfacts_proxy:
   fake: false
   token: secret set per deployment layer
-  app_id: '60388ee2'
-  app_key: 'b1b0f11f493da308175c024b15f47d87'
+  app_id: ''
+  app_key: ''
   base_url: "https://apis-dev.berkeley.edu/bearfacts-apis"
 
 research_user_proxy:
