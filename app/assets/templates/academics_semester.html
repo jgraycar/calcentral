@@ -170,7 +170,7 @@
       </div>
     </div>
 
-    <div data-ng-if="selectedStudentSemester && (selectedSemester.timeBucket !== 'future') && ((selectedSemester.timeBucket !== 'past') || selectedSemester.gradingInProgress)"
+    <div data-ng-if="(selectedStudentSemester && (selectedSemester.timeBucket !== 'future') && ((selectedSemester.timeBucket !== 'past') || selectedSemester.gradingInProgress)) && !isLawStudent"
          class="cc-widget cc-widget-interesting">
       <div class="cc-widget-title">
         <h2>GPA Calculator</h2>
