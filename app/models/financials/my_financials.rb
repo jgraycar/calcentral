@@ -41,7 +41,12 @@ module Financials
         logger.info "Lookup of student_id for uid #@uid failed, cannot call CFV API"
         feed = no_billing_data_response
       else
-        response = Financials::Proxy.new(user_id: @uid, student_id: student_id).get
+        if law_student?
+          # if develop new API, use it here
+          response = Financials::Proxy.new(user_id: @uid, student_id: student_id).get
+        else
+          response = Financials::Proxy.new(user_id: @uid, student_id: student_id).get
+        end
         feed = parse_response(response)
       end
       feed.merge(feed_metadata(feed, instance_key))
