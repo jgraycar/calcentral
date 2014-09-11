@@ -120,8 +120,8 @@
       return rawData;
     };
 
-    var fetch = function() {
-      badgesFactory.getBadges().success(function(data) {
+    var fetch = function(options) {
+      badgesFactory.getBadges(options).success(function(data) {
         apiService.updatedFeeds.feedLoaded(data);
         decorateBadges(processCalendarEvents(data.badges || {}));
         $scope.studentInfo = data.studentInfo;
@@ -144,7 +144,9 @@
 
     $scope.$on('calcentral.api.updatedFeeds.updateServices', function(event, services) {
       if (services && services['MyBadges::Merged']) {
-        fetch();
+        fetch({
+          refreshCache: true
+        });
       }
     });
 
