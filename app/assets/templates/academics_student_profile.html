@@ -76,7 +76,8 @@
           <tr>
             <td></td>
             <td><strong data-ng-bind="collegeAndLevel.standing"></strong></td>
-            <td data-ng-if="gpaUnits.totalUnits !== null"><strong data-ng-bind="gpaUnits.totalUnits"></strong></td>
+            <td data-ng-if="gpaUnits.totalUnits !== null && !isLawStudent"><strong data-ng-bind="gpaUnits.totalUnits"></strong></td>
+            <td data-ng-if="isLawStudent"><strong>N/A</strong></td>
           </tr>
         </tbody>
       </table>
