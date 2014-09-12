@@ -40,6 +40,7 @@
             link.roles[i] === true &&
             link.roles[i] ===  apiService.user.profile.roles[i]) {
             if (i == "student" && apiService.user.profile.roles["lawStudent"]) {
+                // Prevents law students from seeing regular student links
                 continue;
             }
             return true;
@@ -69,6 +70,8 @@
      * @param {Array} links The list of links that need to be parsed
      */
     var compileLinks = function(links, currentTopCategory) {
+      // Maybe set lawStudent user_attribute role here?
+      // apiService.user.profile.roles["lawStudent"] = apiService.bearfacts...
       var response = {
         links: [],
         subcategories: [],

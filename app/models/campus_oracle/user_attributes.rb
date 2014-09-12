@@ -35,7 +35,7 @@ module CampusOracle
           :faculty => result['affiliations'].include?("EMPLOYEE-TYPE-ACADEMIC"),
           :staff => result['affiliations'].include?("EMPLOYEE-TYPE-STAFF"),
           :guest => result['affiliations'].include?("GUEST-TYPE-COLLABORATOR"),
-          :lawStudent => false # couldn't use Bearfacts to get since starts infinite loop; set for real in user/api.rb
+          :lawStudent => false # couldn't use Bearfacts to get since starts infinite loop
         }
         result
       else
