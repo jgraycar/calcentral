@@ -93,6 +93,7 @@ module User
       {
         :isSuperuser => current_user_policy.can_administrate?,
         :isViewer => current_user_policy.can_view_as?,
+        :isLawStudent => @law_student,
         :firstLoginAt => @first_login_at,
         :first_name => @first_name,
         :fullName => @first_name + ' ' + @last_name,

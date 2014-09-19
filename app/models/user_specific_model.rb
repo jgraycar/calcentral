@@ -12,6 +12,15 @@ class UserSpecificModel < AbstractModel
     super(uid, options)
     @uid = uid
     @authentication_state = AuthenticationState.new(@options.merge(user_id: @uid))
+
+    # set law_student to true if user's only college is School fo Law
+    profile_feed = Bearfacts::Profile.new({:user_id => uid}).get
+    doc = profile_feed[:xml_doc]
+    @law_student = false
+    if !(doc.blank? || doc.css("studentGeneralProfile").blank?)
+      general_profile = doc.css("studentGeneralProfile")
+      @law_student = general_profile.css("collegePrimary").text.strip.eql? "LAW"
+    end
   end
 
   def directly_authenticated?
