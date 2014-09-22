@@ -13,7 +13,7 @@ class UserSpecificModel < AbstractModel
     @uid = uid
     @authentication_state = AuthenticationState.new(@options.merge(user_id: @uid))
 
-    # set law_student to true if user's only college is School fo Law
+    # set law_student to true if user's only college is School of Law
     profile_feed = Bearfacts::Profile.new({:user_id => uid}).get
     doc = profile_feed[:xml_doc]
     @law_student = false
