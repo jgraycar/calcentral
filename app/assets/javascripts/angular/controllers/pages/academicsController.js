@@ -5,8 +5,7 @@
   /**
    * Academics controller
    */
-  angular.module('calcentral.controllers').controller('AcademicsController', function(academicsFactory, apiService, badgesFactory, $http, $routeParams, $scope) {
-
+  angular.module('calcentral.controllers').controller('AcademicsController', function(academicsFactory, apiService, badgesFactory, $routeParams, $scope) {
     apiService.util.setTitle('My Academics');
 
     var checkPageExists = function(page) {
@@ -136,7 +135,6 @@
     };
 
     var parseTeaching = function(teachingSemesters) {
-
       if (!teachingSemesters) {
         return {};
       }
@@ -164,7 +162,6 @@
         }
       }
       return teaching;
-
     };
 
     var countSectionItem = function(selectedCourse, sectionItem) {
@@ -232,7 +229,6 @@
     };
 
     var isLSStudent = function(collegeAndLevel) {
-
       if (!collegeAndLevel || !collegeAndLevel.colleges) {
         return false;
       }
@@ -341,8 +337,7 @@
         academicsFactory.getAcademics().success(parseAcademics);
         badgesFactory.getBadges().success(function(data) {
           $scope.studentInfo = data.studentInfo;
-          $scope.isLawStudent = data.isLawStudent;
-          if ($scope.isLawStudent) {
+          if ($scope.studentInfo.isLawStudent) {
             $scope.transcriptLink = 'http://www.law.berkeley.edu/php-programs/registrar/forms/transcriptrequestform.php';
           } else {
             $scope.transcriptLink = 'https://telebears.berkeley.edu/tranreq/';
@@ -350,6 +345,5 @@
         });
       }
     });
-
   });
 })(window.angular);

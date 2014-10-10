@@ -54,7 +54,7 @@ describe Canvas::RefreshAllCampusData do
         expect(section_ids[0]).to eq "SEC:2014-B-2#{ccn}"
         expect(section_ids[1]).to eq "SEC:2014-B-1#{ccn}"
         expect(known_users).to eq []
-        expect(options[:batch_mode]).to be_false
+        expect(options[:batch_mode]).to be_falsey
         expect(options[:cached_enrollments_provider]).to be_an_instance_of Canvas::TermEnrollmentsCsv
         double(refresh_sections_in_course: nil)
       end
@@ -88,8 +88,9 @@ describe Canvas::RefreshAllCampusData do
         enrollments_csv = subject.instance_eval { @term_to_memberships_csv_filename.values[0] }
         expected_course_id = 'CRS:COMPSCI-9D-2014-D'
         expected_sis_section_ids = ['SEC:2014-D-25123', 'SEC:2014-D-25124']
-        expect(Canvas::SiteMembershipsMaintainer).to receive(:process).with(expected_course_id, expected_sis_section_ids, enrollments_csv, users_csv, known_uids, false, cached_enrollments_provider).once
-        subject.refresh_existing_term_sections(term, enrollments_csv, known_uids, users_csv, cached_enrollments_provider)
+        sis_user_id_changes = { "sis_login_id:7978" => "2018903" }
+        expect(Canvas::SiteMembershipsMaintainer).to receive(:process).with(expected_course_id, expected_sis_section_ids, enrollments_csv, users_csv, known_uids, false, cached_enrollments_provider, sis_user_id_changes).once
+        subject.refresh_existing_term_sections(term, enrollments_csv, known_uids, users_csv, cached_enrollments_provider, sis_user_id_changes)
       end
     end
 

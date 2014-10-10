@@ -22,20 +22,49 @@ describe 'MyBadges::StudentInfo' do
   it 'should create student_info instance along with the necessary variables' do
     u = MyBadges::StudentInfo.new(random_uid)
     u.should_not be_nil
-    u.is_a?(MyBadges::StudentInfo).should be_true
+    u.is_a?(MyBadges::StudentInfo).should be_truthy
   end
 
   it 'should create a well-formed response with correct keys for a random user' do
     result = MyBadges::StudentInfo.new(random_uid).get
-    result.has_key?(:californiaResidency).should be_true
-    result.has_key?(:regStatus).should be_true
-    result.has_key?(:regBlock).should be_true
+    result.has_key?(:californiaResidency).should be_truthy
+    result.has_key?(:regStatus).should be_truthy
+    result.has_key?(:regBlock).should be_truthy
+    result.has_key?(:isLawStudent).should be_truthy
   end
 
   it 'should create camelCased regBlocks for oski' do
     result = MyBadges::StudentInfo.new('61889').get_reg_blocks
-    result.has_key?(:needsAction).should be_true
-    result.has_key?(:activeBlocks).should be_true
+    result.has_key?(:needsAction).should be_truthy
+    result.has_key?(:activeBlocks).should be_truthy
+  end
+
+  context 'for Law student users' do
+    let! (:law_proxy) { Bearfacts::Profile.new({user_id: '212381', fake: true}) }
+    before do
+      Bearfacts::Proxy.any_instance.stub(:lookup_student_id).and_return(99999997)
+      Bearfacts::Profile.stub(:new).and_return(law_proxy)
+    end
+
+    subject { MyBadges::StudentInfo.new('212381').get }
+
+    it 'should set isLawStudent to true' do
+      subject[:isLawStudent].should be_present
+      subject[:isLawStudent].should be_truthy
+    end
+  end
+
+  context 'offline bearfacts isLawStudent' do
+    before do
+      stub_request(:any, /.+regblocks.*/).to_raise(Faraday::Error::ConnectionFailed)
+      Bearfacts::Proxy.any_instance.stub(:lookup_student_id).and_return(11667051)
+    end
+
+    subject { MyBadges::StudentInfo.new(random_uid).get }
+
+    it 'should default isLawStudent to false' do
+      subject[:isLawStudent].should be_falsey
+    end
   end
 
   context 'offline bearfacts regblock' do
@@ -52,11 +81,11 @@ describe 'MyBadges::StudentInfo' do
     end
 
     it 'bearfacts API should be offline' do
-      subject[:regBlock][:errored].should be_true
+      subject[:regBlock][:errored].should be_truthy
     end
 
     it 'needsAction should be false' do
-      subject[:regBlock][:needsAction].should be_false
+      subject[:regBlock][:needsAction].should be_falsey
     end
   end
 
@@ -76,11 +105,11 @@ describe 'MyBadges::StudentInfo' do
     end
 
     it 'bearfacts API should be online' do
-      subject[:regBlock][:errored].should be_false
+      subject[:regBlock][:errored].should be_falsey
     end
 
     it 'needsAction should be true' do
-      subject[:regBlock][:needsAction].should be_true
+      subject[:regBlock][:needsAction].should be_truthy
     end
 
   end
