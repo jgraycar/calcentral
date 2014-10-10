@@ -17,7 +17,7 @@
         </div>
       </div>
       <div data-cc-spinner-directive class="cc-academics-semester-books">
-        <div class="cc-widget-padding" data-ng-if="api.user.profile.features.textbooks && !isLawStudent">
+        <div class="cc-widget-padding" data-ng-if="api.user.profile.features.textbooks">
           <div data-ng-repeat="courseBooks in semesterBooks" class="cc-clearfix-container">
             <h3 class="cc-book-title" data-ng-bind="courseBooks.course"></h3>
             <div data-ng-repeat="books in courseBooks">
